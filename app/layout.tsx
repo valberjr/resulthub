@@ -1,4 +1,5 @@
 import '@/styles/globals.css';
+import { ClerkProvider } from '@clerk/nextjs';
 import { Analytics } from '@vercel/analytics/react';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
@@ -17,13 +18,15 @@ export default function RootLayout({
   readonly children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className="h-full">
-      <body className={`h-full ${inter.className}`}>
-        <div className="flex flex-col h-full mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
-          {children}
-        </div>
-        <Analytics />
-      </body>
-    </html>
+    <ClerkProvider>
+      <html lang="en" className="h-full">
+        <body className={`h-full ${inter.className}`}>
+          <div className="flex flex-col h-full mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
+            {children}
+          </div>
+          <Analytics />
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }
