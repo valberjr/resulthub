@@ -1,10 +1,29 @@
-import { add } from '@/actions/add-result.action';
+'use client';
+
+import { add } from '@/actions/result.actions';
+import { useRef } from 'react';
 import Button from '../ui/Button';
 import Input from '../ui/Input';
 
-const Result = async () => {
+const Result = () => {
+  const ref = useRef<HTMLFormElement>(null);
+
   return (
-    <form action={add} className="w-full sm:w-4/5">
+    <form
+      ref={ref}
+      action={async (formData) => {
+        try {
+          await add(formData);
+          ref.current?.reset();
+          // TODO: replace with toast
+          alert('Result added successfully');
+        } catch (error) {
+          // TODO: replace with toast
+          alert('Error trying to add result');
+        }
+      }}
+      className="w-full sm:w-4/5"
+    >
       <div className="flex flex-col sm:flex-row items-center py-2">
         <Input
           type="text"
@@ -22,8 +41,8 @@ const Result = async () => {
         <Input
           type="text"
           className="appearance-none bg-transparent border-b border-teal-500 w-full text-gray-700 mb-2 sm:mb-0 sm:mr-3 py-2 px-2 leading-tight focus:outline-none"
-          name="result"
-          placeholder="Result"
+          name="value"
+          placeholder="Result Value"
           required
         />
         <Button
