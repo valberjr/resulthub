@@ -1,3 +1,4 @@
+import ThemeController from '@/components/ui/ThemeController';
 import '@/styles/globals.css';
 import { ClerkProvider, UserButton } from '@clerk/nextjs';
 
@@ -21,11 +22,14 @@ export default function RootLayout({
 }) {
   return (
     <ClerkProvider>
-      <html lang="en">
-        <body className={`${inter.className} min-h-screen bg-gray-100`}>
+      <html data-theme="light" lang="en">
+        <body className={`${inter.className} min-h-screen`}>
           <div className="flex">
-            <div className="flex flex-col justify-end items-center w-1/4 lg:w-1/5 bg-gray-900 min-h-screen p-4">
-              <UserButton afterSignOutUrl="/" />
+            <div className="flex flex-col justify-end items-center w-1/4 lg:w-1/5 min-h-screen p-4 bg-base-300">
+              <div className="flex items-center space-x-4">
+                <UserButton afterSignOutUrl="/" />
+                <ThemeController />
+              </div>
             </div>
             <main className="flex-1">
               <div className="mx-auto max-w-7xl p-4">{children}</div>
