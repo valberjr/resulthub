@@ -26,9 +26,9 @@ export default function RootLayout({
         <body className={`${inter.className} min-h-screen`}>
           <div className="flex">
             <div className="flex flex-col justify-end items-center w-1/4 lg:w-1/5 min-h-screen p-4 bg-base-300">
-              <div className="flex items-center space-x-4">
-                <UserButton afterSignOutUrl="/" />
+              <div className="flex flex-col sm:flex-row items-center space-x-0 sm:space-x-4 space-y-4 sm:space-y-0">
                 <ThemeController />
+                <UserButton afterSignOutUrl="/" />
               </div>
             </div>
             <main className="flex-1">
