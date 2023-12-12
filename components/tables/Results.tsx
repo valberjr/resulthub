@@ -1,13 +1,26 @@
 'use client';
 
-import { remove } from '@/actions/result.actions';
+import { findById, remove } from '@/actions/result.actions';
 import { TResult } from '@/types/result.types';
+import { useEffect, useRef, useState } from 'react';
+import ResultEdit from '../forms/ResultEdit';
+import Dialog from '../ui/Dialog';
 
 type ResultsProps = {
   results: TResult[];
 };
 
 const Results = ({ results }: ResultsProps) => {
+  const [resultToEdit, setResultToEdit] = useState<TResult>();
+
+  const modalRef = useRef<HTMLDialogElement>(null);
+
+  useEffect(() => {
+    if (resultToEdit && modalRef.current) {
+      modalRef.current.showModal();
+    }
+  }, [resultToEdit]);
+
   return (
     <div className="overflow-x-auto">
       <table className="table table-zebra">
@@ -27,17 +40,28 @@ const Results = ({ results }: ResultsProps) => {
               <td>{result.name}</td>
               <td>{result.value}</td>
               <td className="py-2">
-                {/* TODO: add edit action */}
                 <div className="tooltip" data-tip="edit result">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    className="swap-on fill-current"
+                  <button
+                    onClick={async () => {
+                      try {
+                        const resultFound = await findById(result.id);
+                        setResultToEdit(resultFound);
+                      } catch (error) {
+                        // TODO: replace with toast
+                        console.log('Error trying to find result', error);
+                      }
+                    }}
                   >
-                    <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34a.9959.9959 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" />
-                  </svg>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      className="swap-on fill-current"
+                    >
+                      <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34a.9959.9959 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" />
+                    </svg>
+                  </button>
                 </div>
                 <div className="tooltip" data-tip="remove result">
                   <button
@@ -68,6 +92,14 @@ const Results = ({ results }: ResultsProps) => {
           ))}
         </tbody>
       </table>
+      {resultToEdit && (
+        <Dialog
+          id="modal-edit-result"
+          title="Edit Result"
+          ref={modalRef}
+          content={<ResultEdit data={resultToEdit} modalRef={modalRef} />}
+        />
+      )}
     </div>
   );
 };

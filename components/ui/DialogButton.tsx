@@ -1,18 +1,31 @@
 'use client';
 
-import React, { forwardRef } from 'react';
+import React from 'react';
 import Button from './Button';
 
-type DialogProps = {
+type DialogButtonProps = {
   id: string;
   title: string;
   content: string | React.ReactNode;
+  buttonLabel: string;
 };
 
-const Dialog = forwardRef<HTMLDialogElement, DialogProps>(
-  ({ id, title, content }, ref) => {
-    return (
-      <dialog id={id} ref={ref} className="modal">
+const DialogButton = ({
+  id,
+  title,
+  content,
+  buttonLabel,
+}: DialogButtonProps) => {
+  return (
+    <>
+      <Button
+        label={buttonLabel}
+        className="btn"
+        onClick={() =>
+          (document.getElementById(`${id}`) as HTMLFormElement).showModal()
+        }
+      />
+      <dialog id={id} className="modal">
         <div className="modal-box">
           <form method="dialog">
             {/* if there is a button in form, it will close the modal */}
@@ -25,8 +38,8 @@ const Dialog = forwardRef<HTMLDialogElement, DialogProps>(
           <div className="py-4">{content}</div>
         </div>
       </dialog>
-    );
-  }
-);
+    </>
+  );
+};
 
-export default Dialog;
+export default DialogButton;
