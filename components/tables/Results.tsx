@@ -3,6 +3,7 @@
 import { findById, remove } from '@/actions/result.actions';
 import { TResult } from '@/types/result.types';
 import { useEffect, useRef, useState } from 'react';
+import { toast } from 'react-toastify';
 import ResultEdit from '../forms/ResultEdit';
 import Dialog from '../ui/Dialog';
 
@@ -47,8 +48,7 @@ const Results = ({ results }: ResultsProps) => {
                         const resultFound = await findById(result.id);
                         setResultToEdit(resultFound);
                       } catch (error) {
-                        // TODO: replace with toast
-                        console.log('Error trying to find result', error);
+                        toast.error('Error trying to find result');
                       }
                     }}
                   >
@@ -68,11 +68,9 @@ const Results = ({ results }: ResultsProps) => {
                     onClick={async () => {
                       try {
                         await remove(result.id);
-                        // TODO: replace with toast
-                        alert('Result deleted successfully');
+                        toast.success('Result deleted successfully');
                       } catch (error) {
-                        // TODO: replace with toast
-                        console.log('Error trying to delete result', error);
+                        toast.error('Error trying to delete result');
                       }
                     }}
                   >

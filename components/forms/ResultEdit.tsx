@@ -3,6 +3,7 @@
 import { update } from '@/actions/result.actions';
 import { TResult } from '@/types/result.types';
 import { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
 import Button from '../ui/Button';
 import Input from '../ui/Input';
 
@@ -38,12 +39,10 @@ const ResultEdit = ({ data, modalRef }: ResultEditProps) => {
   const handleAction = async (formData: FormData) => {
     try {
       await update(formData);
-      // TODO: replace with toast
       modalRef?.current.close();
-      console.info('Result edited successfully');
+      toast.success('Result edited successfully');
     } catch (error) {
-      // TODO: replace with toast
-      console.error('Error trying to add result', error);
+      toast.error('Error trying to edit result');
     }
   };
 

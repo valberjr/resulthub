@@ -1,4 +1,5 @@
 import ThemeController from '@/components/ui/ThemeController';
+import ToastWrapper from '@/shared/ToastWrapper';
 import '@/styles/globals.css';
 import { ClerkProvider, UserButton } from '@clerk/nextjs';
 
@@ -37,6 +38,7 @@ export default function RootLayout({
           </div>
           <Analytics />
           <SpeedInsights />
+          <ToastWrapper />
         </body>
       </html>
     </ClerkProvider>

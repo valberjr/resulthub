@@ -2,6 +2,7 @@
 
 import { add } from '@/actions/result.actions';
 import { useRef } from 'react';
+import { toast } from 'react-toastify';
 import Button from '../ui/Button';
 import Input from '../ui/Input';
 
@@ -19,14 +20,12 @@ const ResultForm = ({ modalId }: ResultFormProps) => {
         try {
           await add(formData);
           ref.current?.reset();
-          // TODO: replace with toast
-          alert('Result added successfully');
+          toast.success('Result added successfully');
           if (modalId) {
             (document.getElementById(`${modalId}`) as HTMLFormElement).close();
           }
         } catch (error) {
-          // TODO: replace with toast
-          alert('Error trying to add result');
+          toast.error('Error trying to add result');
         }
       }}
       className="flex flex-col gap-3"
