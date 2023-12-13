@@ -1,10 +1,6 @@
 'use client';
 
-import {
-  findAllWithPagination,
-  findById,
-  remove,
-} from '@/actions/result.actions';
+import { findById, paginatedResults, remove } from '@/actions/result.actions';
 import { TResult } from '@/types/result.types';
 import { useEffect, useRef, useState } from 'react';
 import { toast } from 'react-toastify';
@@ -43,7 +39,7 @@ const Results = ({ data, pageNumber, total }: ResultsProps) => {
 
   const fetchPaginatedResults = async (page: number) => {
     try {
-      const { data, total } = await findAllWithPagination(page, pageSize);
+      const { data, total } = await paginatedResults(page, pageSize);
       setResults(data);
       setPage(page);
       setIsLastPage((page - 1) * pageSize + data.length >= total);
