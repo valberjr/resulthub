@@ -4,11 +4,11 @@ import Results from '@/components/tables/Results';
 import DialogButton from '@/components/ui/DialogButton';
 
 export default async function Home() {
-  const { data } = await findAllWithPagination();
+  const { data, total } = await findAllWithPagination();
 
   return (
     <>
-      {data && <Results data={data} />}
+      {data && <Results data={data} pageNumber={1} total={total} />}
       <div className="py-4">
         <DialogButton
           id="modal-add-result"

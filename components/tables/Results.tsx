@@ -15,9 +15,11 @@ import Pagination from './Pagination';
 
 type ResultsProps = {
   data: TResult[];
+  pageNumber: number;
+  total: number;
 };
 
-const Results = ({ data }: ResultsProps) => {
+const Results = ({ data, pageNumber, total }: ResultsProps) => {
   const [resultToEdit, setResultToEdit] = useState<TResult>();
   const [results, setResults] = useState<TResult[]>();
   const [page, setPage] = useState(1);
@@ -25,8 +27,12 @@ const Results = ({ data }: ResultsProps) => {
 
   const modalRef = useRef<HTMLDialogElement>(null);
 
+  const pageSize = 5;
+
   useEffect(() => {
     setResults(data);
+    setPage(pageNumber);
+    setIsLastPage((pageNumber - 1) * pageSize + data.length >= total);
   }, [data]);
 
   useEffect(() => {
@@ -36,11 +42,32 @@ const Results = ({ data }: ResultsProps) => {
   }, [resultToEdit]);
 
   const fetchPaginatedResults = async (page: number) => {
-    const pageSize = 5;
-    const { data, total } = await findAllWithPagination(page, pageSize);
-    setResults(data);
-    setPage(page);
-    setIsLastPage((page - 1) * pageSize + data.length >= total);
+    try {
+      const { data, total } = await findAllWithPagination(page, pageSize);
+      setResults(data);
+      setPage(page);
+      setIsLastPage((page - 1) * pageSize + data.length >= total);
+    } catch (error) {
+      toast.error('Error trying to fetch results');
+    }
+  };
+
+  const handleEdit = async (id: string) => {
+    try {
+      const resultFound = await findById(id);
+      setResultToEdit(resultFound);
+    } catch (error) {
+      toast.error('Error trying to find result');
+    }
+  };
+
+  const handleRemove = async (id: string) => {
+    try {
+      await remove(id);
+      toast.success('Result deleted successfully');
+    } catch (error) {
+      toast.error('Error trying to delete result');
+    }
   };
 
   return (
@@ -49,30 +76,21 @@ const Results = ({ data }: ResultsProps) => {
         <table className="table table-zebra">
           <thead>
             <tr>
-              <th>#</th>
               <th>Date</th>
               <th>Name</th>
               <th>Value</th>
             </tr>
           </thead>
           <tbody>
-            {results?.map((result: TResult, index) => (
+            {results?.map((result: TResult) => (
               <tr key={result.id}>
-                <th>{index + 1}</th>
                 <td>{result.date}</td>
                 <td>{result.name}</td>
                 <td>{result.value}</td>
                 <td className="py-2">
                   <div className="tooltip" data-tip="edit result">
                     <Button
-                      onClick={async () => {
-                        try {
-                          const resultFound = await findById(result.id);
-                          setResultToEdit(resultFound);
-                        } catch (error) {
-                          toast.error('Error trying to find result');
-                        }
-                      }}
+                      onClick={() => handleEdit(result.id)}
                       label={
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
@@ -88,14 +106,7 @@ const Results = ({ data }: ResultsProps) => {
                   </div>
                   <div className="tooltip" data-tip="remove result">
                     <Button
-                      onClick={async () => {
-                        try {
-                          await remove(result.id);
-                          toast.success('Result deleted successfully');
-                        } catch (error) {
-                          toast.error('Error trying to delete result');
-                        }
-                      }}
+                      onClick={() => handleRemove(result.id)}
                       label={
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
