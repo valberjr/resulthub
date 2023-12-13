@@ -28,14 +28,28 @@ export const update = async (formData: FormData) => {
   revalidatePath('/');
 };
 
-export const all = async (): Promise<TResult[]> => {
+export const remove = async (id: string) => {
+  await prisma.result.delete({ where: { id } });
+  revalidatePath('/');
+};
+
+export const findAll = async (): Promise<TResult[]> => {
   const results: TResult[] = await prisma.result.findMany();
   return results;
 };
 
-export const remove = async (id: string) => {
-  await prisma.result.delete({ where: { id } });
-  revalidatePath('/');
+export const findAllWithPagination = async (
+  page: number = 1,
+  pageSize: number = 5
+): Promise<{ data: TResult[]; total: number }> => {
+  const [data, total] = await prisma.$transaction([
+    prisma.result.findMany({
+      skip: (page - 1) * pageSize,
+      take: pageSize,
+    }),
+    prisma.result.count(),
+  ]);
+  return { data, total };
 };
 
 export const findById = async (selectedId: string): Promise<TResult> => {

@@ -1,22 +1,20 @@
-import { all } from '@/actions/result.actions';
+import { findAllWithPagination } from '@/actions/result.actions';
 import ResultForm from '@/components/forms/ResultForm';
 import Results from '@/components/tables/Results';
 import DialogButton from '@/components/ui/DialogButton';
-import { TResult } from '@/types/result.types';
 
 export default async function Home() {
-  const results: TResult[] = await all();
-  const modalId = 'modal-add-result';
+  const { data } = await findAllWithPagination();
 
   return (
     <>
-      {results.length > 0 && <Results results={results} />}
+      {data && <Results data={data} />}
       <div className="py-4">
         <DialogButton
-          id={modalId}
+          id="modal-add-result"
           title="Add new Result"
           buttonLabel="Add new result"
-          content={<ResultForm modalId={modalId} />}
+          content={<ResultForm modalId="modal-add-result" />}
         />
       </div>
     </>
