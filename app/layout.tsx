@@ -1,4 +1,4 @@
-import ThemeController from '@/components/ui/ThemeController';
+import ThemeController from '@/shared/ThemeController';
 import ToastWrapper from '@/shared/ToastWrapper';
 import '@/styles/globals.css';
 import { ClerkProvider, UserButton } from '@clerk/nextjs';
