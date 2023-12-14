@@ -133,8 +133,9 @@ const Results = ({ data, pageNumber, total }: ResultsProps) => {
       {results && (
         <Pagination
           page={page}
-          onPagination={fetchPaginatedResults}
           isLastPage={isLastPage}
+          totalRecords={total}
+          onPagination={fetchPaginatedResults}
         />
       )}
     </>
