@@ -11,12 +11,14 @@ const ThemeController = () => {
   };
 
   return (
-    <input
-      type="checkbox"
-      value="synthwave"
-      className="checkbox theme-controller"
-      onChange={changeTheme}
-    />
+    <div className="tooltip" data-tip="change theme">
+      <input
+        type="checkbox"
+        value="synthwave"
+        className="checkbox theme-controller"
+        onChange={changeTheme}
+      />
+    </div>
   );
 };
 
