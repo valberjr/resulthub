@@ -33,12 +33,7 @@ export const remove = async (id: string) => {
   revalidatePath('/');
 };
 
-export const findAll = async (): Promise<TResult[]> => {
-  const results: TResult[] = await prisma.result.findMany();
-  return results;
-};
-
-export const findAllWithPagination = async (
+export const paginatedResults = async (
   page: number = 1,
   pageSize: number = 5
 ): Promise<{ data: TResult[]; total: number }> => {

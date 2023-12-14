@@ -1,10 +1,10 @@
-import { findAllWithPagination } from '@/actions/result.actions';
+import { paginatedResults } from '@/actions/result.actions';
 import ResultForm from '@/components/forms/ResultForm';
 import Results from '@/components/tables/Results';
 import DialogButton from '@/components/ui/DialogButton';
 
 export default async function Home() {
-  const { data, total } = await findAllWithPagination();
+  const { data, total } = await paginatedResults();
 
   return (
     <>
